@@ -3,3 +3,13 @@ uploads/
 .env
 .DS_Store
 *.log
+
+git status
+git add .
+git commit -m "Fles changes"
+git push origin main
+
+
+
+
+
