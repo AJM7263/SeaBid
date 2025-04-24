@@ -59,37 +59,40 @@ router.get('/:id', async (req, res) => {
 
 // Add a new product with file upload
 router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
-    const { tipoDePescado, precio, descripcion, fecha, peso } = req.body;
-    const image = req.file ? req.file.filename : null;
-
-    // Retrieve fisherId from the session
-    const fisherId = req.session.userId; // Assuming userId in the session corresponds to FisherID
+    const fisherId = req.session.userId;
     const userType = req.session.userType;
 
-    // Ensure the logged-in user is a Fisher
-    if (!fisherId || userType !== 'Fisher') {
+    console.log('Session data:', req.session); // Debugging session data
+    console.log('Fisher ID:', fisherId); // Log fisherId
+    console.log('User Type:', userType); // Log userType
+
+    // Check if the user is a fisher
+    if (!fisherId || userType !== 'fisher') {
         return res.status(403).send('Only fishers can add products.');
     }
 
-    console.log('Request body:', req.body); // Log the request body
-    console.log('Uploaded file:', req.file); // Log the uploaded file
-    console.log('FisherID from session:', fisherId); // Log the FisherID from the session
-
-    // Validate input
-    if (!tipoDePescado || !precio || !descripcion || !fecha || !peso || !image) {
-        return res.status(400).send('All fields are required.');
-    }
-
-    console.log('Received product data:', { tipoDePescado, precio, descripcion, fecha, peso, image, fisherId });
-
-    // Save the product to the database
-    const query = 'INSERT INTO Product (TipoDePescado, Precio, Descripcion, Fecha, Peso, Imagen, FisherID) VALUES (?, ?, ?, ?, ?, ?, ?)';
     try {
-        const [results] = await db.execute(query, [tipoDePescado, precio, descripcion, fecha, peso, image, fisherId]);
-        console.log('Product added successfully:', results);
-        return res.redirect('/products'); // Redirect to the products page on success
+        const { TipoDePescado, Precio, Descripcion, Peso, Fecha } = req.body; // Extract Fecha from req.body
+        const Imagen = req.file ? req.file.filename : null;
+
+        console.log('Request body:', req.body); // Debugging form data
+        console.log('Uploaded file:', req.file); // Debugging uploaded file
+
+        // Validate input
+        if (!TipoDePescado || !Precio || !Descripcion || !Peso || !Fecha || !Imagen) {
+            return res.status(400).send('All fields are required.');
+        }
+
+        const query = `
+            INSERT INTO Product (FisherID, TipoDePescado, Precio, Descripcion, Peso, Imagen, Fecha)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+        await db.query(query, [fisherId, TipoDePescado, Precio, Descripcion, Peso, Imagen, Fecha]);
+
+        console.log('Product added successfully!');
+        res.redirect('/products');
     } catch (err) {
-        console.error('Database error:', err);
+        console.error('Error adding product:', err);
         res.status(500).send('Failed to add product.');
     }
 });

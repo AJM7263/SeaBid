@@ -9,12 +9,24 @@
 <body>
     <h1>Add a New Product</h1>
     <form action="/products" method="POST" enctype="multipart/form-data">
-        <input type="text" name="tipoDePescado" placeholder="Tipo de Pescado" required>
-        <input type="number" step="0.01" name="precio" placeholder="Precio" required>
-        <textarea name="descripcion" placeholder="Descripción" required></textarea>
-        <input type="date" name="fecha" required>
-        <input type="number" step="0.01" name="peso" placeholder="Peso" required>
-        <input type="file" name="image" accept="image/*" required>
+        <label for="TipoDePescado">Type of Fish:</label>
+        <input type="text" id="TipoDePescado" name="TipoDePescado" required>
+
+        <label for="Precio">Price:</label>
+        <input type="number" id="Precio" name="Precio" required>
+
+        <label for="Descripcion">Description:</label>
+        <textarea id="Descripcion" name="Descripcion" required></textarea>
+
+        </label for="Fecha">Date Fished:</label>
+        <input type="date" id="Fecha" name="Fecha" required>
+
+        <label for="Peso">Weight (kg):</label>
+        <input type="number" id="Peso" name="Peso" required>
+
+        <label for="Imagen">Image:</label>
+        <input type="file" id="Imagen" name="image" required>
+
         <button type="submit">Add Product</button>
     </form>
 </body>

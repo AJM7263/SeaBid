@@ -7,7 +7,7 @@ const productsRoute = require('./routes/products'); //Route for products
 const ordersRoute = require('./routes/orders'); //Route for orders
 const authRoute = require('./routes/auth'); //Route for authentication
 const userRoutes = require('./routes/user'); // Import the user routes
-
+const db = require('./db'); // Ensure this is imported if not already
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -22,7 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(session({
     secret: 'your-secret-key', // Replace with a strong secret key
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false } // Set to true if using HTTPS
 }));
 
@@ -37,7 +37,19 @@ app.use(methodOverride((req, res) => {
 app.use('/user', userRoutes); 
 app.use('/products', productsRoute);
 app.use('/orders', ordersRoute);
-app.use('/auth', authRoute)
+app.use('/auth', authRoute);
+
+// Render products.ejs as the default page
+app.get('/', async (req, res) => {
+    try {
+        // Fetch products from the database
+        const [products] = await db.query('SELECT * FROM Product WHERE RestaurantID IS NULL');
+        res.render('products', { products }); // Render the products.ejs template with the fetched products
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).send('Failed to load products.');
+    }
+});
 
 // Start the server
 const port = process.env.PORT || 3000;

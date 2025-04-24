@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require('../db'); // Import the database connection
 const path = require('path'); // Import path module
 const bcrypt = require('bcryptjs'); // Import bcrypt for password hashing
-const { userInfo } = require('os');
 
 // Serve the login page
 router.get('/login', (req, res) => {
@@ -12,36 +11,39 @@ router.get('/login', (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body; // Use username from the request body
+    const { username, password, userType } = req.body;
 
     try {
-        // Check if the user exists in fisher_users
-        const [fisher] = await db.query('SELECT * FROM fisher WHERE Nombre = ?', [username]); // Use username here
-        if (fisher.length > 0) {
-            const isMatch = await bcrypt.compare(password, fisher[0].Password);
-            if (isMatch) {
-                req.session.userId = fisher[0].id; // Set userId
-                req.session.userType = 'fisher'; // Set userType
-                console.log('Session after login:', req.session); // Log session data
-                return res.redirect('/products'); // Redirect to the products page after successful login
+        if (userType === 'fisher') {
+            // Check if the user exists in the fisher table
+            const [fisher] = await db.query('SELECT * FROM fisher WHERE Nombre = ?', [username]);
+            if (fisher.length > 0) {
+                const isMatch = await bcrypt.compare(password, fisher[0].Password);
+                if (isMatch) {
+                    req.session.userId = fisher[0].FisherID; // Set userId
+                    req.session.userType = 'fisher'; // Set userType to 'fisher'
+                    console.log('Logged in as fisher:', req.session);
+                    return res.redirect('/products');
+                }
+            }
+        } else if (userType === 'restaurant') {
+            // Check if the user exists in the restaurant table
+            const [restaurant] = await db.query('SELECT * FROM restaurant WHERE Nombre = ?', [username]);
+            if (restaurant.length > 0) {
+                const isMatch = await bcrypt.compare(password, restaurant[0].Password);
+                if (isMatch) {
+                    req.session.userId = restaurant[0].RestaurantID; // Set userId
+                    req.session.userType = 'restaurant'; // Set userType to 'restaurant'
+                    console.log('Logged in as restaurant:', req.session);
+                    return res.redirect('/products');
+                }
             }
         }
 
-        // Check if the user exists in restaurant_users
-        const [restaurant] = await db.query('SELECT * FROM restaurant WHERE Nombre = ?', [username]); // Use username here
-        if (restaurant.length > 0) {
-            const isMatch = await bcrypt.compare(password, restaurant[0].Password);
-            if (isMatch) {
-                req.session.userId = restaurant[0].id; // Set userId
-                req.session.userType = 'restaurant'; // Set userType
-                console.log('Session after login:', req.session); // Log session data
-                return res.redirect('/products'); // Redirect to the products page after successful login
-            }
-        }
-
+        // If no match is found
         res.status(401).send('Invalid username or password.');
     } catch (err) {
-        console.error(err);
+        console.error('Error during login:', err);
         res.status(500).send('Server error.');
     }
 });

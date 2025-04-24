@@ -23,8 +23,6 @@
                 <p>Description: <%= product.Descripcion %></p>
                 <p>Weight: <%= product.Peso %> kg</p>
                 <a href="/products/<%= product.ProductID %>">View Details</a> <!-- Link to the product details page -->
-                <form action="/products/<%= product.ProductID %>/edit" method="GET">
-                    <button type="submit">Edit</button>
                 <form action="/products/<%= product.ProductID %>" method="POST">
                     <input type="hidden" name="_method" value="DELETE">
                     <button type="submit">Delete</button>
