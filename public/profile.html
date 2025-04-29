@@ -15,6 +15,7 @@
                 <li><a href="javascript:void(0);" onclick="showSection('change-username')">Change Username</a></li>
                 <li><a href="javascript:void(0);" onclick="showSection('change-password')">Change Password</a></li>
                 <li><a href="javascript:void(0);" onclick="showSection('delete-account')">Delete Account</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('logout-account')">Logout Account</a></li>
             </ul>
         </aside>
 
@@ -43,6 +44,13 @@
                 <p>Warning: This action cannot be undone.</p>
                 <form id="delete-account-form">
                     <button type="submit" class="delete-button">Delete Account</button>
+                </form>
+            </section>
+
+            <section id="logout-account">
+                <h2>Logout</h2>
+                <form id="logout-account-form" action="/auth/logout" method="POST">
+                    <button type="submit" class="logout-button">Logout</button>
                 </form>
             </section>
         </main>
@@ -118,6 +126,20 @@
                 }
             }
         });
+        document.getElementById('logout-account-form').addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        const response = await fetch('/auth/logout', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            alert('Logged out successfully.');
+            window.location.href = '/auth/login'; // Redirect to the login page
+        } else {
+            alert('Failed to log out.');
+        }
+    });
     </script>
 </body>
 </html>

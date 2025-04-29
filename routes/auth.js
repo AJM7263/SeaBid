@@ -79,4 +79,14 @@ router.post('/register', async (req, res) => {
     }
 });
 
+
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Failed to log out.');
+        }
+        res.redirect('/auth/login'); // Redirect to the login page after logout
+    });
+});
 module.exports = router;

@@ -12,7 +12,7 @@
     <p>Description: <%= product.Descripcion %></p>
     <p>Price: $<%= product.Precio %></p>
     <p>Weight: <%= product.Peso %> kg</p>
-    <p>Date Fished: <%= product.Fecha %></p>
+    <p>Date Fished: <%= new Date(product.Fecha).toISOString().split('T')[0] %></p>
     <form action="/orders" method="POST">
         <input type="hidden" name="product_id" value="<%= product.ProductID %>">
         <label for="quantity">Quantity:</label>

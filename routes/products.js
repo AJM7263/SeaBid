@@ -30,6 +30,12 @@ router.get('/', async (req, res) => {
         const query = 'SELECT * FROM Product WHERE RestaurantID IS NULL';
         const [products] = await db.query(query);
         res.render('products', { products }); // Render the products page with available products
+        const formattedProducts = products.map(product => {
+            return {
+                ...product,
+                Fecha: product.Fecha ? product.Fecha.toISOString().split('T')[0] : null // Format Fecha to YYYY-MM-DD
+            };
+        });
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).send('Failed to fetch products.');
@@ -62,17 +68,17 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
     const fisherId = req.session.userId;
     const userType = req.session.userType;
 
-    console.log('Session data:', req.session); // Debugging session data
-    console.log('Fisher ID:', fisherId); // Log fisherId
-    console.log('User Type:', userType); // Log userType
-
+    //Console log test
+    console.log('Session data:', req.session);
+    console.log('Fisher ID:', fisherId); 
+    console.log('User Type:', userType);
     // Check if the user is a fisher
     if (!fisherId || userType !== 'fisher') {
         return res.status(403).send('Only fishers can add products.');
     }
 
     try {
-        const { TipoDePescado, Precio, Descripcion, Peso, Fecha } = req.body; // Extract Fecha from req.body
+        const { TipoDePescado, Precio, Descripcion, Peso, Fecha } = req.body; 
         const Imagen = req.file ? req.file.filename : null;
 
         console.log('Request body:', req.body); // Debugging form data
@@ -89,7 +95,7 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
         `;
         await db.query(query, [fisherId, TipoDePescado, Precio, Descripcion, Peso, Imagen, Fecha]);
 
-        console.log('Product added successfully!');
+        console.log('Product added successfully!'); //Console log test
         res.redirect('/products');
     } catch (err) {
         console.error('Error adding product:', err);
@@ -100,22 +106,22 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
 // DELETE route to delete a product
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
-    console.log(`DELETE request received for product ID: ${req.params.id}`);
+    console.log(`DELETE request received for product ID: ${req.params.id}`); //TESTS
 
     try {
-        // Execute DELETE query to remove the product from the database
         const [result] = await db.execute('DELETE FROM Product WHERE ProductID = ?', [id]);
 
         if (result.affectedRows === 0) {
             return res.status(404).send('Product not found.');
         }
 
-        console.log(`Product with ID ${id} deleted successfully.`);
-        res.redirect('/products'); // Redirect back to the products page
+        console.log(`Product with ID ${id} deleted successfully.`); //Console log test
+        res.redirect('/products'); 
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).send('Failed to delete product.');
     }
 });
+
 
 module.exports = router;

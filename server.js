@@ -20,10 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(session({
-    secret: 'your-secret-key', // Replace with a strong secret key
+    secret: 'your-secret-key', 
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false } 
 }));
 
 app.use(methodOverride((req, res) => {
@@ -39,17 +39,11 @@ app.use('/products', productsRoute);
 app.use('/orders', ordersRoute);
 app.use('/auth', authRoute);
 
-// Render products.ejs as the default page
-app.get('/', async (req, res) => {
-    try {
-        // Fetch products from the database
-        const [products] = await db.query('SELECT * FROM Product WHERE RestaurantID IS NULL');
-        res.render('products', { products }); // Render the products.ejs template with the fetched products
-    } catch (err) {
-        console.error('Error fetching products:', err);
-        res.status(500).send('Failed to load products.');
-    }
-});
+
+// app.get('/profile', isAuthenticated, (req, res) => {
+//     res.render('profile', { user: req.session.user }); // Render the profile page
+// });
+
 
 // Start the server
 const port = process.env.PORT || 3000;

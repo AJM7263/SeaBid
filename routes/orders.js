@@ -19,7 +19,7 @@ router.post('/', isAuthenticated, async (req, res) => {
     const userId = req.session.userId; // Retrieve the logged-in user's ID
     const userType = req.session.userType; // Retrieve the logged-in user's type (Fisher or Restaurant)
 
-    if (userType !== 'Restaurant') {
+    if (userType !== 'restaurant') {
         return res.status(403).send('Only restaurants can place orders.');
     }
 
