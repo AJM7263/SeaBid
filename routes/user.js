@@ -59,37 +59,27 @@ router.post('/change-password', async (req, res) => {
 router.post('/delete-account', async (req, res) => {
     const { userId, userType } = req.session;
 
-    console.log('Session data:', req.session); // Log session data
-    console.log('User ID:', userId); // Log userId
-    console.log('User Type:', userType); // Log userType
-
     try {
         let query;
-        const normalizedUserType = userType.toLowerCase(); // Normalize userType to lowercase
-
-        if (normalizedUserType === 'fisher') {
+        if (userType === 'fisher') {
             query = 'DELETE FROM fisher WHERE FisherID = ?';
-        } else if (normalizedUserType === 'restaurant') {
+        } else if (userType === 'restaurant') {
             query = 'DELETE FROM restaurant WHERE RestaurantID = ?';
         } else {
-            console.log('Invalid user type:', userType);
             return res.status(400).send('Invalid user type.');
         }
 
-        console.log('Executing query:', query); // Log the query
-        console.log('Query parameters:', [userId]); // Log the query parameters
+        // Delete the user from the database
+        await db.query(query, [userId]);
 
-        const [result] = await db.query(query, [userId]);
-
-        console.log('Query result:', result); // Log the result of the query
-
-        if (result.affectedRows === 0) {
-            console.log('No rows affected. User not found.');
-            return res.status(404).send('User not found.');
-        }
-
-        res.redirect('/auth/login'); // Destroy the session after deleting the account
-        res.status(200).send('Account deleted successfully.');
+        // Destroy the session and redirect to the products page
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).send('Failed to log out.');
+            }
+            res.redirect('/products'); // Redirect to the products page after successful deletion
+        });
     } catch (err) {
         console.error('Error deleting account:', err);
         res.status(500).send('Failed to delete account.');

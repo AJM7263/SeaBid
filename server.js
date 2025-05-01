@@ -40,6 +40,7 @@ app.use('/orders', ordersRoute);
 app.use('/auth', authRoute);
 
 
+
 // app.get('/profile', isAuthenticated, (req, res) => {
 //     res.render('profile', { user: req.session.user }); // Render the profile page
 // });
