@@ -61,9 +61,9 @@ router.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         let query;
-        if (userType === 'Fisher') {
+        if (userType === 'fisher') {
             query = 'INSERT INTO Fisher (Nombre, Password, Email, NumeroTelefono, Localizacion) VALUES (?, ?, ?, ?, ?)';
-        } else if (userType === 'Restaurant') {
+        } else if (userType === 'restaurant') {
             query = 'INSERT INTO Restaurant (Nombre, Password, Email, NumeroTelefono, Localizacion) VALUES (?, ?, ?, ?, ?)';
         } else {
             return res.status(400).send('Invalid user type.');

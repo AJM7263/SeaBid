@@ -88,7 +88,7 @@ router.post('/delete-account', async (req, res) => {
             return res.status(404).send('User not found.');
         }
 
-        req.session.destroy(); // Destroy the session after deleting the account
+        res.redirect('/auth/login'); // Destroy the session after deleting the account
         res.status(200).send('Account deleted successfully.');
     } catch (err) {
         console.error('Error deleting account:', err);
