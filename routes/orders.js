@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // Import your database connection
+const db = require('../db'); 
 
 function isAuthenticated(req, res, next) {
     if (req.session && req.session.userId) {
@@ -16,8 +16,8 @@ router.post('/', isAuthenticated, async (req, res) => {
         return res.status(401).send('You must be logged in to place an order.');
     }
 
-    const userId = req.session.userId; // Retrieve the logged-in user's ID
-    const userType = req.session.userType; // Retrieve the logged-in user's type (Fisher or Restaurant)
+    const userId = req.session.userId;
+    const userType = req.session.userType; 
 
     if (userType !== 'restaurant') {
         return res.status(403).send('Only restaurants can place orders.');

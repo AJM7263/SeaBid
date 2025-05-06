@@ -7,10 +7,10 @@ const path = require('path');
 // Configure multer to save uploaded files to the "uploads" directory
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../uploads')); // Save files to the "uploads" directory
+        cb(null, path.join(__dirname, '../uploads')); 
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`); // Use a unique filename
+        cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
 
@@ -40,9 +40,9 @@ router.get('/', async (req, res) => {
 
 // Fetch a specific product by ID
 router.get('/:id', async (req, res) => {
-    const { id } = req.params; // Extract the product ID from the URL
-    const userId = req.session.userId || null; // Get the user ID from the session
-    const userType = req.session.userType || null; // Get the user type from the session
+    const { id } = req.params; 
+    const userId = req.session.userId || null; 
+    const userType = req.session.userType || null; 
 
     try {
         // Fetch the product and the fisher's name
@@ -64,7 +64,7 @@ router.get('/:id', async (req, res) => {
 
         product.Fecha = product.Fecha ? product.Fecha.toISOString().split('T')[0] : null; 
         
-        res.render('detailsprod', { product, userId, userType }); // Pass session data and product to the template
+        res.render('detailsprod', { product, userId, userType });
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).send('Failed to fetch product details.');
@@ -89,8 +89,8 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
         const { TipoDePescado, Precio, Descripcion, Peso, Fecha } = req.body; 
         const Imagen = req.file ? req.file.filename : null;
 
-        console.log('Request body:', req.body); // Debugging form data
-        console.log('Uploaded file:', req.file); // Debugging uploaded file
+        console.log('Request body:', req.body);
+        console.log('Uploaded file:', req.file);
 
         // Validate input
         if (!TipoDePescado || !Precio || !Descripcion || !Peso || !Fecha || !Imagen) {
@@ -103,7 +103,7 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
         `;
         await db.query(query, [fisherId, TipoDePescado, Precio, Descripcion, Peso, Imagen, Fecha]);
 
-        console.log('Product added successfully!'); //Console log test
+        console.log('Product added successfully!'); 
         res.redirect('/products');
     } catch (err) {
         console.error('Error adding product:', err);
@@ -120,7 +120,7 @@ router.post('/delete/:id', async (req, res) => {
         const query = 'DELETE FROM Product WHERE ProductID = ?';
         await db.query(query, [productId]);
 
-        res.redirect('/profile'); // Redirect back to the profile page after deletion
+        res.redirect('/profile'); 
     } catch (err) {
         console.error('Error deleting product:', err);
         res.status(500).send('Failed to delete product.');

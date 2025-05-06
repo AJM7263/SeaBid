@@ -9,7 +9,7 @@ router.get('/profile', async (req, res) => {
     const userType = req.session.userType;
 
     if (!userId || !userType) {
-        return res.redirect('/auth/login'); // Redirect to login if not logged in
+        return res.redirect('/auth/login'); 
     }
 
     try {
@@ -71,7 +71,7 @@ router.get('/profile', async (req, res) => {
             return res.status(404).send('User not found.');
         }
 
-        // Render the profile page with user data and history
+        
         res.render('profile', { user: user[0], userType, history });
     } catch (err) {
         console.error('Error fetching profile data:', err);
@@ -154,7 +154,7 @@ router.post('/delete-account', async (req, res) => {
                 console.error('Error destroying session:', err);
                 return res.status(500).send('Failed to log out.');
             }
-            res.redirect('/products'); // Redirect to the products page after successful deletion
+            res.redirect('/products'); 
         });
     } catch (err) {
         console.error('Error deleting account:', err);

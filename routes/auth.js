@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 
 // Serve the login page
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/login.html')); // Serve the login.html file
+    res.sendFile(path.join(__dirname, '../public/login.html')); 
 });
 
 // Login route
@@ -14,15 +14,15 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        console.log('Login attempt:', { username, password }); // Log the login attempt
+        console.log('Login attempt:', { username, password }); 
 
         // Check if the user exists in fisher_users
         const [fisher] = await db.query('SELECT * FROM fisher WHERE Nombre = ?', [username]);
-        console.log('Database result (fisher):', fisher); // Log the database result
+        console.log('Database result (fisher):', fisher);
 
         if (fisher.length > 0) {
             const isMatch = await bcrypt.compare(password, fisher[0].Password);
-            console.log('Password match (fisher):', isMatch); // Log the password comparison result
+            console.log('Password match (fisher):', isMatch); 
             if (isMatch) {
                 req.session.userId = fisher[0].FisherID;
                 req.session.userType = 'fisher';
@@ -32,11 +32,11 @@ router.post('/login', async (req, res) => {
 
         // Check if the user exists in restaurant_users
         const [restaurant] = await db.query('SELECT * FROM restaurant WHERE Nombre = ?', [username]);
-        console.log('Database result (restaurant):', restaurant); // Log the database result
+        console.log('Database result (restaurant):', restaurant);
 
         if (restaurant.length > 0) {
             const isMatch = await bcrypt.compare(password, restaurant[0].Password);
-            console.log('Password match (restaurant):', isMatch); // Log the password comparison result
+            console.log('Password match (restaurant):', isMatch);
             if (isMatch) {
                 req.session.userId = restaurant[0].RestaurantID;
                 req.session.userType = 'restaurant';
@@ -52,12 +52,12 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-    const isLoggedIn = !!req.session.userId; // Check if the user is logged in
-    res.render('register', { isLoggedIn }); // Pass `isLoggedIn` to the template
+    const isLoggedIn = !!req.session.userId; 
+    res.render('register', { isLoggedIn }); 
 });
 
 router.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/register.html')); // Ensure register.html exists in the public folder
+    res.sendFile(path.join(__dirname, '../public/register.html')); 
 });
 
 // Register route
