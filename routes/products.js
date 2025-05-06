@@ -26,16 +26,12 @@ function isAuthenticated(req, res, next) {
 // Fetch and display products
 router.get('/', async (req, res) => {
     try {
-        // Fetch only available products (RestaurantID is NULL)
+        // Fetch products from the database
         const query = 'SELECT * FROM Product WHERE RestaurantID IS NULL';
         const [products] = await db.query(query);
-        res.render('products', { products }); // Render the products page with available products
-        const formattedProducts = products.map(product => {
-            return {
-                ...product,
-                Fecha: product.Fecha ? product.Fecha.toISOString().split('T')[0] : null // Format Fecha to YYYY-MM-DD
-            };
-        });
+
+        // Pass the products to the EJS template
+        res.render('product', { products });
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).send('Failed to fetch products.');
@@ -45,18 +41,30 @@ router.get('/', async (req, res) => {
 // Fetch a specific product by ID
 router.get('/:id', async (req, res) => {
     const { id } = req.params; // Extract the product ID from the URL
+    const userId = req.session.userId || null; // Get the user ID from the session
+    const userType = req.session.userType || null; // Get the user type from the session
 
     try {
-        // Fetch the product with the specified ID
-        const query = 'SELECT * FROM Product WHERE ProductID = ?';
+        // Fetch the product and the fisher's name
+        const query = `
+            SELECT 
+                Product.*, 
+                Fisher.Nombre AS FisherName 
+            FROM Product 
+            JOIN Fisher ON Product.FisherID = Fisher.FisherID 
+            WHERE Product.ProductID = ?`;
         const [products] = await db.query(query, [id]);
 
         if (products.length === 0) {
             return res.status(404).send('Product not found.');
         }
 
+
         const product = products[0]; // Get the first (and only) product
-        res.render('product-details', { product }); // Render the product-details page with the product
+
+        product.Fecha = product.Fecha ? product.Fecha.toISOString().split('T')[0] : null; 
+        
+        res.render('detailsprod', { product, userId, userType }); // Pass session data and product to the template
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).send('Failed to fetch product details.');

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail - Sea Bid</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jura:wght@700&display=swap">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+    }
+
+    .header {
+      background-color: #233845;
+      padding: 16px 0;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .navigation-pill-list {
+      display: flex;
+      gap: 24px;
+    }
+
+    .navigation-pill a {
+      color: #ffffff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+      font-weight: bold;
+    }
+
+    .navigation-pill a:hover,
+    .navigation-pill a.active {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff !important;
+    }
+
+    .user-icon {
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+    }
+
+    .user-icon img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .product-detail {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 40px;
+      gap: 32px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .product-left {
+      max-width: 300px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .product-image {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .product-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .product-price {
+      font-size: 18px;
+      color: #1e1e1e;
+      margin: 8px 0;
+    }
+
+    .product-right {
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 2;
+    }
+
+    .rating {
+      font-size: 32px;
+      color: #ccc;
+      cursor: pointer;
+      display: flex;
+      gap: 8px;
+      user-select: none;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .rating .star {
+      color: #ccc;
+      transition: color 0.2s ease-in-out, transform 0.2s;
+    }
+
+    .rating .star.hover,
+    .rating .star.selected {
+      color: #000000;
+      transform: scale(1.1);
+    }
+
+    .seller-name {
+      font-weight: bold;
+      color: #444;
+    }
+
+    .product-details-box {
+      background-color: #f2f2f2;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+      gap: 12px; 
+      margin-top: 16px;
+    }
+    .buy-button {
+      padding: 12px; 
+      background-color: #6ee86e;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      width: 200px;
+    }
+
+    .watchlist-button {
+      padding: 12px;
+      background-color: transparent;
+      border: 2px solid #1e1e1e;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 200px;
+    }
+
+    .reviews-section {
+      padding: 40px;
+    }
+
+    .review-box {
+      background-color: #e0e0e0;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('partials/header') %>
+
+  <div class="product-detail">
+    <div class="product-left">
+      <img src="/uploads/<%= product.Imagen %>" alt="<%= product.TipoDePescado %>" class="product-image">
+      <h2 class="product-name"><%= product.TipoDePescado %></h2>
+      <p class="product-price">$<%= product.Precio %></p>
+    </div>
+
+    <div class="product-right">
+      <div class="product-details-box">
+        <p class="seller-name">Seller: <%= product.FisherName %></p>
+        <h3>Details:</h3>
+        <p><%= product.Descripcion %></p>
+        <p><strong>Weight:</strong> <%= product.Peso %> kg</p>
+        <p><strong>Date Caught:</strong> <%= product.Fecha %></p>
+      </div>
+
+      <!-- Buttons Section -->
+      <div class="button-container">
+        <form id="buyForm" action="/orders" method="POST" class="order-form">
+          <input type="hidden" name="product_id" value="<%= product.ProductID %>">
+          <button type="button" id="buyButton" class="buy-button">Buy</button>
+        </form>
+        <button class="watchlist-button">♡ Watchlist</button>
+      </div>
+
+      <!-- Rating Section -->
+      <div class="rating" id="rating">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <h3>Restaurant Reviews:</h3>
+    <div class="review-box">Comentario de ejemplo 1</div>
+    <div class="review-box">Comentario de ejemplo 2</div>
+    <div class="review-box">Comentario de ejemplo 3</div>
+  </div>
+
+  <script>
+    const stars = document.querySelectorAll('.rating .star');
+    let currentRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('mouseover', () => {
+        const value = parseInt(star.getAttribute('data-value'));
+        highlightStars(value);
+      });
+
+      star.addEventListener('mouseout', () => {
+        highlightStars(currentRating);
+      });
+
+      star.addEventListener('click', () => {
+        currentRating = parseInt(star.getAttribute('data-value'));
+        highlightStars(currentRating);
+        alert(`Gracias por calificar con ${currentRating} estrella(s)`);
+      });
+    });
+
+    function highlightStars(rating) {
+      stars.forEach(star => {
+        const val = parseInt(star.getAttribute('data-value'));
+        star.classList.remove('selected');
+        if (val <= rating) {
+          star.classList.add('selected');
+        }
+      });
+    }
+
+    const userId = "<%= userId %>"; // Use the userId passed from the backend
+    const userType = "<%= userType %>"; // Use the userType passed from the backend
+    const buyButton = document.getElementById('buyButton');
+    const buyForm = document.getElementById('buyForm');
+
+    buyButton.addEventListener('click', function () {
+        if (!userId) {
+            // If the user is not logged in, show an alert
+            alert('You must be logged in to place an order.');
+        } else if (userType !== 'restaurant') {
+            // If the user is not a restaurant, show an alert
+            alert('Only restaurants can place orders.');
+        } else {
+            // If the user is logged in and is a restaurant, submit the form
+            buyForm.submit();
+        }
+    });
+  </script>
+</body>
+
+</html>

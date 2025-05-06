@@ -6,7 +6,7 @@ const session = require('express-session'); //Manager of user sessions
 const productsRoute = require('./routes/products'); //Route for products
 const ordersRoute = require('./routes/orders'); //Route for orders
 const authRoute = require('./routes/auth'); //Route for authentication
-const userRoutes = require('./routes/user'); // Import the user routes
+const userRoutes = require('./routes/user'); // Import user routes
 const db = require('./db'); // Ensure this is imported if not already
 
 app.set('view engine', 'ejs');
@@ -34,17 +34,23 @@ app.use(methodOverride((req, res) => {
 }));
 
 // Routes
-app.use('/user', userRoutes); 
+app.use('/', userRoutes); // Register user routes
 app.use('/products', productsRoute);
 app.use('/orders', ordersRoute);
 app.use('/auth', authRoute);
 
+app.get('/', (req, res) => {
+    res.render('index'); // Pass variables to the EJS template
+});
+// Route for the add product page
+app.get('/addproduct', (req, res) => {
+    res.render('addproduct'); // Render the addproduct.ejs file
+});
 
-
-// app.get('/profile', isAuthenticated, (req, res) => {
-//     res.render('profile', { user: req.session.user }); // Render the profile page
-// });
-
+// Route for the contact us page
+app.get('/contactus', (req, res) => {
+    res.render('contactus'); // Render the contactus.ejs file
+});
 
 // Start the server
 const port = process.env.PORT || 3000;

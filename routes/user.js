@@ -3,6 +3,82 @@ const bcrypt = require('bcrypt'); // For password hashing
 const db = require('../db'); // Adjust the path to your database configuration
 const router = express.Router();
 
+// Profile route
+router.get('/profile', async (req, res) => {
+    const userId = req.session.userId;
+    const userType = req.session.userType;
+
+    if (!userId || !userType) {
+        return res.redirect('/auth/login'); // Redirect to login if not logged in
+    }
+
+    try {
+        let userQuery, historyQuery, user, history;
+
+        if (userType === 'fisher') {
+            // Fetch fisher information
+            userQuery = `
+                SELECT 
+                    FisherID AS id, 
+                    Nombre AS username, 
+                    Email AS email, 
+                    NumeroTelefono AS phone, 
+                    Localizacion AS location 
+                FROM Fisher 
+                WHERE FisherID = ?`;
+            [user] = await db.query(userQuery, [userId]);
+
+            // Fetch products listed by the fisher
+            historyQuery = `
+                SELECT 
+                    ProductID, 
+                    TipoDePescado, 
+                    CAST(Precio AS DECIMAL(10, 2)) AS Precio, 
+                    Fecha 
+                FROM Product 
+                WHERE FisherID = ? 
+                ORDER BY Fecha DESC`;
+            [history] = await db.query(historyQuery, [userId]);
+        } else if (userType === 'restaurant') {
+            // Fetch restaurant information
+            userQuery = `
+                SELECT 
+                    RestaurantID AS id, 
+                    Nombre AS username, 
+                    Email AS email, 
+                    NumeroTelefono AS phone, 
+                    Localizacion AS location 
+                FROM Restaurant 
+                WHERE RestaurantID = ?`;
+            [user] = await db.query(userQuery, [userId]);
+
+            // Fetch products purchased by the restaurant
+            historyQuery = `
+                SELECT 
+                    Product.TipoDePescado, 
+                    CAST(Product.Precio AS DECIMAL(10, 2)) AS Precio, 
+                    Product.Fecha AS PurchaseDate, 
+                    Product.OrderID 
+                FROM Product 
+                WHERE Product.RestaurantID = ? 
+                ORDER BY Product.Fecha DESC`;
+            [history] = await db.query(historyQuery, [userId]);
+        } else {
+            return res.status(400).send('Invalid user type.');
+        }
+
+        if (user.length === 0) {
+            return res.status(404).send('User not found.');
+        }
+
+        // Render the profile page with user data and history
+        res.render('profile', { user: user[0], userType, history });
+    } catch (err) {
+        console.error('Error fetching profile data:', err);
+        res.status(500).send('Failed to load profile.');
+    }
+});
+
 // Change Username
 router.post('/change-username', async (req, res) => {
     console.log('Session Data in /change-username:', req.session); // Log session data

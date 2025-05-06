@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sea Bid - Register</title>
+    <title>Sea Bid - Agregar Producto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jura:wght@700&display=swap">
@@ -53,33 +53,25 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
+        .navigation-pill a.active {
+            background-color: #ffffff;
+            color: #233845 !important;
+        }
+
         .hero-form {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 100px 0;
+            padding: 40px 24px;
         }
 
         .title7 {
             font-size: 48px;
             font-weight: bold;
             color: #1e1e1e;
-
-        }
-
-        .input-field select {
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #d9d9d9;
-            font-size: 16px;
-            color: #233845;
-            width: 100%;
-            margin-bottom: 16px;
-            /* igual que los inputs */
-            background-color: #fff;
-            appearance: none;
-            /* quita flecha por defecto en algunos navegadores */
+            margin-bottom: 32px;
         }
 
         .form-contact {
@@ -87,15 +79,13 @@
             border: 1px solid #d9d9d9;
             padding: 32px;
             border-radius: 12px;
-            max-width: 400px;
+            max-width: 500px;
             width: 100%;
             text-align: left;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .input-field {
-            display: flex;
-            flex-direction: column;
             margin-bottom: 16px;
         }
 
@@ -106,12 +96,14 @@
             margin-bottom: 6px;
         }
 
-        .input-field input {
+        .input-field input,
+        .input-field textarea {
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #d9d9d9;
             font-size: 16px;
             color: #233845;
+            width: 100%;
         }
 
         .button4 {
@@ -140,66 +132,68 @@
             /* o usa transparent si prefieres quitarlo */
             color: #ffffff !important;
         }
+
+        /* Mejora visual para que las cajas no se desborden */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Asegura que todos los input, textarea y button estén uniformes */
+        input,
+        textarea,
+        button {
+            max-width: 100%;
+            display: block;
+        }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <div class="navigation-pill-list">
-          <div class="navigation-pill">
-            <a href="/">Home</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/products">Product</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/addproduct.html">Add product</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/contactus.html">Contact</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/auth/login">Sign in</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/auth/register">Register</a>
-        </div>
-        </div>
-        <div class="user-icon">
-          <a href="/profile">
-            <img src="/profile.png" alt="User Icon"></a>
-        </div>
-    </div>
+    
+    <%- include('partials/header') %>
+
     <div class="hero-form">
-        <h1 class="title7">Register</h1>
+        <h1 class="title7">Add Product</h1>
         <div class="form-contact">
-            <form action="/auth/register" method="POST">
-
+            <form action="/products" method="POST" enctype="multipart/form-data">
+                <!-- Fish Type -->
                 <div class="input-field">
-                    <label for="userType">Profile:</label>
-                    <select id="userType" name="userType" required>
-                        <option value="" disabled selected>Select profile</option>
-                        <option value="Fisher">Fisher</option>
-                        <option value="Restaurant">Restaurnt</option>
-                    </select>
+                    <label for="TipoDePescado">Fish Type</label>
+                    <input type="text" id="TipoDePescado" name="TipoDePescado" placeholder="Enter fish type" required>
                 </div>
 
+                <!-- Price -->
                 <div class="input-field">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                
-                    <label for="numeroTelefono">Phone Number</label>
-                    <input type="text" id="numeroTelefono" name="numeroTelefono" required>
-                
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                    <label for="localizacion">localizacion</label>
-                    <input type="text" name="localizacion" required>
+                    <label for="Precio">Price</label>
+                    <input type="number" id="Precio" name="Precio" step="0.01" placeholder="Enter price" required>
                 </div>
-                <button type="submit" class="button4">Register</button>
+
+                <!-- Description -->
+                <div class="input-field">
+                    <label for="Descripcion">Description</label>
+                    <textarea id="Descripcion" name="Descripcion" rows="3" placeholder="Enter description" required></textarea>
+                </div>
+
+                <!-- Weight -->
+                <div class="input-field">
+                    <label for="Peso">Weight</label>
+                    <input type="number" id="Peso" name="Peso" step="0.01" placeholder="Enter weight" required>
+                </div>
+
+                <!-- Date -->
+                <div class="input-field">
+                    <label for="Fecha">Date</label>
+                    <input type="date" id="Fecha" name="Fecha" required>
+                </div>
+
+                <!-- Image -->
+                <div class="input-field">
+                    <label for="image">Image</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="button4">Add Product</button>
             </form>
         </div>
     </div>

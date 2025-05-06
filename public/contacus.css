@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+}
+.header {
+    background-color: #233845;
+    padding: 16px 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.user-icon {
+position: absolute;
+top: 50%;
+right: 24px;
+transform: translateY(-50%);
+}
+.user-icon img {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+}
+.navigation-pill-list {
+    display: flex;
+    gap: 24px;
+}
+.navigation-pill a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+.navigation-pill a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.hero-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+}
+.title7 {
+    font-size: 48px;
+    font-weight: bold;
+    color: #1e1e1e;
+    margin-bottom: 32px;
+}
+.form-contact {
+    background-color: #ffffff;
+    border: 1px solid #d9d9d9;
+    padding: 32px;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.input-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+.input-field label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #233845;
+    margin-bottom: 6px;
+}
+.input-field input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d9d9d9;
+    font-size: 16px;
+    color: #233845;
+}
+.button4 {
+    width: 100%;
+    padding: 12px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+.button4:hover {
+    background-color: #444444;
+}
+
+.navigation-pill a,
+.navigation-pill a:visited {
+    color: #ffffff;
+}
+.navigation-pill a.active {
+    background-color: rgba(255, 255, 255, 0.2); /* o usa transparent si prefieres quitarlo */
+    color: #ffffff !important;
+}

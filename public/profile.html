@@ -1,145 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="profile.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Perfil - Sea Bid</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f6f6f6;
+    }
+
+    .header {
+      background-color: #233845;
+      padding: 16px 0;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .navigation-pill-list {
+      display: flex;
+      gap: 24px;
+    }
+
+    .navigation-pill a {
+      color: #ffffff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .navigation-pill a:hover,
+    .navigation-pill a.active {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .user-icon {
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+    }
+
+    .user-icon img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .profile-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .profile-header h2 {
+      font-size: 32px;
+      color: #233845;
+    }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .info-block label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .info-block input {
+      margin-top: 6px;
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #233845;
+    }
+
+    .history-section {
+      margin-top: 40px;
+    }
+
+    .history-section h3 {
+      color: #233845;
+      margin-bottom: 16px;
+    }
+
+    .history-item {
+      background-color: #f2f2f2;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button {
+      background-color: #1e1e1e;
+      color: #fff;
+    }
+
+    .logout-button:hover {
+      background-color: #444;
+    }
+
+    .save-button {
+      background-color: #6ee86e;
+    }
+
+    .save-button:hover {
+      background-color: #55cc55;
+    }
+
+    .delete-button {
+      background-color: #ff4d4d;
+      color: #fff;
+    }
+
+    .delete-button:hover {
+      background-color: #e60000;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>User Profile</h1>
-    <div class="profile-page">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <ul>
-                <li><a href="javascript:void(0);" onclick="showSection('change-username')">Change Username</a></li>
-                <li><a href="javascript:void(0);" onclick="showSection('change-password')">Change Password</a></li>
-                <li><a href="javascript:void(0);" onclick="showSection('delete-account')">Delete Account</a></li>
-                <li><a href="javascript:void(0);" onclick="showSection('logout-account')">Logout Account</a></li>
-            </ul>
-        </aside>
+  <div class="header">
+    <div class="navigation-pill-list">
+      <div class="navigation-pill">
+        <a href="/">Home</a>
+    </div>
+      <div class="navigation-pill">
+        <a href="/products">Product</a>
+    </div>
+      <div class="navigation-pill">
+        <a href="/addproduct.html">Add product</a>
+    </div>
+      <div class="navigation-pill">
+        <a href="/contactus.html">Contact</a>
+    </div>
+      <div class="navigation-pill">
+        <a href="/auth/login">Sign in</a>
+    </div>
+      <div class="navigation-pill">
+        <a href="/auth/register">Register</a>
+    </div>
+    </div>
+    <div class="user-icon">
+      <a href="/profile">
+        <img src="/profile.png" alt="User Icon"></a>
+    </div>
+  </div>
 
-        <!-- Main Content -->
-        <main class="profile-content">
-            <section id="change-username">
-                <h2>Change Username</h2>
-                <form id="update-username-form">
-                    <label for="username">New Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter new username" required>
-                    <button type="submit">Update Username</button>
-                </form>
-            </section>
-
-            <section id="change-password">
-                <h2>Change Password</h2>
-                <form id="update-password-form">
-                    <label for="password">New Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Enter new password" required>
-                    <button type="submit">Update Password</button>
-                </form>
-            </section>
-
-            <section id="delete-account">
-                <h2>Delete Account</h2>
-                <p>Warning: This action cannot be undone.</p>
-                <form id="delete-account-form">
-                    <button type="submit" class="delete-button">Delete Account</button>
-                </form>
-            </section>
-
-            <section id="logout-account">
-                <h2>Logout</h2>
-                <form id="logout-account-form" action="/auth/logout" method="POST">
-                    <button type="submit" class="logout-button">Logout</button>
-                </form>
-            </section>
-        </main>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h2>Mi Perfil</h2>
+    </div>
+    <div class="profile-info">
+      <div class="info-block">
+        <label for="username">Nombre de usuario</label>
+        <input type="text" id="username" value="usuario_demo">
+      </div>
+      <div class="info-block">
+        <label for="email">Email</label>
+        <input type="email" id="email" value="usuario@email.com">
+      </div>
+      <div class="info-block">
+        <label for="role">Rol</label>
+        <input type="text" id="role" value="Restaurante" disabled>
+      </div>
+      <div class="info-block">
+        <label for="location">Ubicación</label>
+        <input type="text" id="location" value="San Juan, PR">
+      </div>
+      <div class="info-block" style="grid-column: span 2;">
+        <label for="password">Nueva contraseña</label>
+        <input type="password" id="password" placeholder="••••••••">
+      </div>
     </div>
 
-    <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.profile-content section');
-            sections.forEach(section => section.classList.remove('active'));
+    <div class="history-section">
+      <h3>Historial de Compras</h3>
+      <div class="history-item">02/05/2025 - Filete de Mero - $25.00</div>
+      <div class="history-item">01/05/2025 - Pargo rojo 2kg - $38.00</div>
+      <div class="history-item">28/04/2025 - Langosta fresca - $70.00</div>
+    </div>
 
-            // Show the selected section
-            const activeSection = document.getElementById(sectionId);
-            if (activeSection) {
-                activeSection.classList.add('active');
-            }
-        }
-
-        // Show the first section by default
-        document.addEventListener('DOMContentLoaded', () => {
-            showSection('change-username');
-        });
-        // Handle Change Username Form Submission
-        document.getElementById('update-username-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-
-            const response = await fetch('/user/change-username', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username }),
-            });
-
-            if (response.ok) {
-                alert('Username updated successfully.');
-            } else {
-                alert('Failed to update username.');
-            }
-        });
-
-        // Handle Change Password Form Submission
-        document.getElementById('update-password-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-
-            const response = await fetch('/user/change-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password }),
-            });
-
-            if (response.ok) {
-                alert('Password updated successfully.');
-            } else {
-                alert('Failed to update password.');
-            }
-        });
-
-        // Handle Delete Account Form Submission
-        document.getElementById('delete-account-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                const response = await fetch('/user/delete-account', {
-                    method: 'POST',
-                });
-
-                if (response.ok) {
-                    alert('Account deleted successfully.');
-                    window.location.href = '/'; // Redirect to the homepage
-                } else {
-                    alert('Failed to delete account.');
-                }
-            }
-        });
-        document.getElementById('logout-account-form').addEventListener('submit', async (e) => {
-        e.preventDefault(); // Prevent the default form submission
-
-        const response = await fetch('/auth/logout', {
-            method: 'POST',
-        });
-
-        if (response.ok) {
-            alert('Logged out successfully.');
-            window.location.href = '/auth/login'; // Redirect to the login page
-        } else {
-            alert('Failed to log out.');
-        }
-    });
-    </script>
+    <div class="action-buttons">
+      <button class="save-button">Guardar cambios</button>
+      <button class="delete-button">Eliminar cuenta</button>
+      <button class="logout-button">Cerrar sesión</button>
+    </div>
+  </div>
 </body>
+
 </html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <h1>User Profile</h1>
+    <div class="profile-page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul>
+                <li><a href="javascript:void(0);" onclick="showSection('change-username')">Change Username</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('change-password')">Change Password</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('delete-account')">Delete Account</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('logout-account')">Logout Account</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-content">
+            <section id="change-username">
+                <h2>Change Username</h2>
+                <form id="update-username-form">
+                    <label for="username">New Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter new username" required>
+                    <button type="submit">Update Username</button>
+                </form>
+            </section>
+
+            <section id="change-password">
+                <h2>Change Password</h2>
+                <form id="update-password-form">
+                    <label for="password">New Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter new password" required>
+                    <button type="submit">Update Password</button>
+                </form>
+            </section>
+
+            <section id="delete-account">
+                <h2>Delete Account</h2>
+                <p>Warning: This action cannot be undone.</p>
+                <form id="delete-account-form">
+                    <button type="submit" class="delete-button">Delete Account</button>
+                </form>
+            </section>
+
+            <section id="logout-account">
+                <h2>Logout</h2>
+                <form id="logout-account-form" action="/auth/logout" method="POST">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.profile-content section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Show the selected section
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.add('active');
+            }
+        }
+
+        // Show the first section by default
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('change-username');
+        });
+        // Handle Change Username Form Submission
+        document.getElementById('update-username-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+
+            const response = await fetch('/user/change-username', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username }),
+            });
+
+            if (response.ok) {
+                alert('Username updated successfully.');
+            } else {
+                alert('Failed to update username.');
+            }
+        });
+
+        // Handle Change Password Form Submission
+        document.getElementById('update-password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/user/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password }),
+            });
+
+            if (response.ok) {
+                alert('Password updated successfully.');
+            } else {
+                alert('Failed to update password.');
+            }
+        });
+
+        // Handle Delete Account Form Submission
+        document.getElementById('delete-account-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                const response = await fetch('/user/delete-account', {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    alert('Account deleted successfully.');
+                    window.location.href = '/'; // Redirect to the homepage
+                } else {
+                    alert('Failed to delete account.');
+                }
+            }
+        });
+        document.getElementById('logout-account-form').addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        const response = await fetch('/auth/logout', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            alert('Logged out successfully.');
+            window.location.href = '/auth/login'; // Redirect to the login page
+        } else {
+            alert('Failed to log out.');
+        }
+    });
+    </script>
+</body>
+</html>

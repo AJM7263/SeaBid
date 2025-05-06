@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sea Bid - Register</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Sea Bid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jura:wght@700&display=swap">
     <style>
@@ -144,62 +144,35 @@
 </head>
 
 <body>
-    <div class="header">
-        <div class="navigation-pill-list">
-          <div class="navigation-pill">
-            <a href="/">Home</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/products">Product</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/addproduct.html">Add product</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/contactus.html">Contact</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/auth/login">Sign in</a>
-        </div>
-          <div class="navigation-pill">
-            <a href="/auth/register">Register</a>
-        </div>
-        </div>
-        <div class="user-icon">
-          <a href="/profile">
-            <img src="/profile.png" alt="User Icon"></a>
-        </div>
-    </div>
+    <%- include('partials/header') %>
+
     <div class="hero-form">
-        <h1 class="title7">Register</h1>
+        <div class="text-content-title">
+            <h1 class="title7">Login</h1>
+        </div>
+
+        <!-- Nuevo campo: tipo de usuario -->
+
         <div class="form-contact">
-            <form action="/auth/register" method="POST">
-
+            <form action="/auth/login" method="POST">
                 <div class="input-field">
-                    <label for="userType">Profile:</label>
-                    <select id="userType" name="userType" required>
-                        <option value="" disabled selected>Select profile</option>
-                        <option value="Fisher">Fisher</option>
-                        <option value="Restaurant">Restaurnt</option>
-                    </select>
-                </div>
 
-                <div class="input-field">
-                    <label for="username">Username</label>
+                    <div class="input-field">
+                        <label for="userType">Profile:</label>
+                        <select id="userType" name="userType" required>
+                            <option value="" disabled selected>Select profile</option>
+                            <option value="Fisher">Fisher</option>
+                            <option value="Restaurant">Restaurant</option>
+                        </select>
+                    </div>
+                    <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
-                
-                    <label for="numeroTelefono">Phone Number</label>
-                    <input type="text" id="numeroTelefono" name="numeroTelefono" required>
-                
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                    <label for="localizacion">localizacion</label>
-                    <input type="text" name="localizacion" required>
                 </div>
-                <button type="submit" class="button4">Register</button>
+                <div class="input-field">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="button4">Login</button>
             </form>
         </div>
     </div>

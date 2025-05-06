@@ -1,0 +1,137 @@
+/* ========================= */
+/* ESTILOS GENERALES */
+/* ========================= */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #233845;
+}
+
+/* ========================= */
+/* ESTILOS DEL HEADER */
+/* ========================= */
+/* Header general */
+.header {
+    background-color: #233845;
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+    position: relative;
+  }
+  
+
+.user-icon {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+}
+.user-icon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+  /* Lista de navegación centrada */
+  .navigation-pill-list {
+    display: flex;
+    gap: 24px;
+  }
+  
+  /* Estilos base de los enlaces */
+  .navigation-pill a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Efecto hover */
+  .navigation-pill a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Página activa */
+  .navigation-pill a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+  
+.hero-form {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+.title7 {
+    font-size: 48px;
+    font-weight: bold;
+    color: #1e1e1e;
+    margin-bottom: 32px;
+}
+
+
+
+
+
+/* ========================= */
+/* ESTILO DEL LOGO */
+/* ========================= */
+.hero-section .logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    object-fit: cover; /* Recorta la imagen para que llene el círculo */
+    background-color: rgba(255, 255, 255, 0.1); /* Sombra ligera alrededor */
+    padding: 10px; /* Espaciado interno para que no se vea pegado */
+}
+
+
+
+/* ========================= */
+/* SECCIÓN HERO (PRINCIPAL) */
+/* ========================= */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.hero-section .logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.hero-section h1 {
+    font-size: 48px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Botón Ver Productos */
+.button-primary {
+    padding: 12px 24px;
+    background-color: #ffffff;
+    color: #233845;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.navigation-pill a,
+.navigation-pill a:visited {
+    color: #ffffff;
+}
+.navigation-pill a.active {
+    background-color: rgba(255, 255, 255, 0.2); /* o usa transparent si prefieres quitarlo */
+    color: #ffffff !important;
+}
