@@ -84,7 +84,7 @@ router.post('/register', async (req, res) => {
         // Save the user to the database
         await db.query(query, [username, hashedPassword, email, numeroTelefono, localizacion]);
         console.log(`${userType} registered successfully: ${username}, ${email}`);
-        res.redirect('/auth/login'); // Redirect to the login page
+        res.redirect('/auth/login'); 
     } catch (err) {
         console.error('Database query error:', err);
         res.status(500).json({ message: 'Server error.' });
@@ -97,7 +97,7 @@ router.post('/logout', (req, res) => {
             console.error('Error destroying session:', err);
             return res.status(500).send('Failed to log out.');
         }
-        res.redirect('/auth/login'); // Redirect to the login page after logout
+        res.redirect('/auth/login'); 
     });
 });
 module.exports = router;
