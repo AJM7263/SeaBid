@@ -111,25 +111,20 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
     }
 });
 
-// DELETE route to delete a product
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    console.log(`DELETE request received for product ID: ${req.params.id}`); //TESTS
+// Route to delete a product by ID
+router.post('/delete/:id', async (req, res) => {
+    const productId = req.params.id;
 
     try {
-        const [result] = await db.execute('DELETE FROM Product WHERE ProductID = ?', [id]);
+        // Delete the product from the database
+        const query = 'DELETE FROM Product WHERE ProductID = ?';
+        await db.query(query, [productId]);
 
-        if (result.affectedRows === 0) {
-            return res.status(404).send('Product not found.');
-        }
-
-        console.log(`Product with ID ${id} deleted successfully.`); //Console log test
-        res.redirect('/products'); 
+        res.redirect('/profile'); // Redirect back to the profile page after deletion
     } catch (err) {
-        console.error('Database error:', err);
+        console.error('Error deleting product:', err);
         res.status(500).send('Failed to delete product.');
     }
 });
-
 
 module.exports = router;
