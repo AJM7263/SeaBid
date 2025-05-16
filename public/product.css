@@ -197,6 +197,16 @@ color: #ffffff !important;
     border: 1px solid #d9d9d9;
     background-color: #ffffff;
     cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    color: inherit;
+}
+
+.filter-btn:focus,
+.filter-btn:active {
+    outline: none; /* Removes the blue outline when focused or active */
+    box-shadow: none; /* Removes any focus box-shadow */
+    color: inherit; /* Ensures the text color doesn't change */
 }
 
 .filter-btn:hover {

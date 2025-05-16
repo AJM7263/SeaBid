@@ -19,14 +19,14 @@
             <!-- Sección de Productos -->
             <div class="main-content">
                 <div class="search-bar">
-                    <input type="text" placeholder="Search">
-                    <button>🔍</button>
+                    <form action="/products" method="GET">
+                        <input type="text" name="search" placeholder="Search" value="<%= searchQuery %>">
+                    </form>
                 </div>
                 <div class="filter-buttons">
-                    <button class="filter-btn">✔ New</button>
-                    <button class="filter-btn">Price ascending</button>
-                    <button class="filter-btn">Price descending</button>
-                    <button class="filter-btn">Rating</button>
+                    <a href="/products?search=<%= searchQuery %>&sort=new" class="filter-btn <%= sort === 'new' ? 'active' : '' %>">✔ New</a>
+                    <a href="/products?search=<%= searchQuery %>&sort=price_asc" class="filter-btn <%= sort === 'price_asc' ? 'active' : '' %>">Price ascending</a>
+                    <a href="/products?search=<%= searchQuery %>&sort=price_desc" class="filter-btn <%= sort === 'price_desc' ? 'active' : '' %>">Price descending</a>
                 </div>
                 <div class="product-grid">
                     <!-- Tarjetas de Productos -->

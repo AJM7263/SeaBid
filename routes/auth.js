@@ -4,50 +4,47 @@ const db = require('../db'); // Import the database connection
 const path = require('path'); // Import path module
 const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 
-// Serve the login page
+// GET /login route
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/login.html')); 
+    res.render('login', { message: null }); // Pass null for message by default
 });
 
-// Login route
+// POST /login route
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, userType } = req.body;
+
+    console.log('Login attempt:', { username, userType });
 
     try {
-        console.log('Login attempt:', { username, password }); 
+        let user;
+        if (userType === 'Fisher') {
+            [user] = await db.query('SELECT * FROM Fisher WHERE Nombre = ?', [username]);
+        } else if (userType === 'Restaurant') {
+            [user] = await db.query('SELECT * FROM Restaurant WHERE Nombre = ?', [username]);
+        } else {
+            console.log('Invalid user type selected.');
+            return res.render('login', { message: 'Invalid user type selected.' });
+        }
 
-        // Check if the user exists in fisher_users
-        const [fisher] = await db.query('SELECT * FROM fisher WHERE Nombre = ?', [username]);
-        console.log('Database result (fisher):', fisher);
+        console.log('User found:', user);
 
-        if (fisher.length > 0) {
-            const isMatch = await bcrypt.compare(password, fisher[0].Password);
-            console.log('Password match (fisher):', isMatch); 
+        if (user.length > 0) {
+            const isMatch = await bcrypt.compare(password, user[0].Password);
+            console.log('Password match:', isMatch);
+
             if (isMatch) {
-                req.session.userId = fisher[0].FisherID;
-                req.session.userType = 'fisher';
+                req.session.userId = user[0].FisherID || user[0].RestaurantID;
+                req.session.userType = userType.toLowerCase();
+                console.log('Login successful. Redirecting...');
                 return res.redirect('/');
             }
         }
 
-        // Check if the user exists in restaurant_users
-        const [restaurant] = await db.query('SELECT * FROM restaurant WHERE Nombre = ?', [username]);
-        console.log('Database result (restaurant):', restaurant);
-
-        if (restaurant.length > 0) {
-            const isMatch = await bcrypt.compare(password, restaurant[0].Password);
-            console.log('Password match (restaurant):', isMatch);
-            if (isMatch) {
-                req.session.userId = restaurant[0].RestaurantID;
-                req.session.userType = 'restaurant';
-                return res.redirect('/');
-            }
-        }
-
-        res.status(401).send('Invalid username or password.');
+        console.log('Invalid username or password.');
+        res.render('login', { message: 'Invalid username or password.' });
     } catch (err) {
         console.error('Error during login:', err);
-        res.status(500).send('Server error.');
+        res.render('login', { message: 'Server error. Please try again later.' });
     }
 });
 
@@ -57,7 +54,7 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/register.html')); 
+    res.sendFile(path.join(__dirname, '../views/register.ejs')); 
 });
 
 // Register route
@@ -65,11 +62,10 @@ router.post('/register', async (req, res) => {
     const { username, password, email, numeroTelefono, localizacion, userType } = req.body;
 
     if (!username || !password || !email || !userType) {
-        return res.status(400).json({ message: 'Username, password, email, and user type are required.' });
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
 
     try {
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         let query;
@@ -78,16 +74,14 @@ router.post('/register', async (req, res) => {
         } else if (userType === 'Restaurant') {
             query = 'INSERT INTO Restaurant (Nombre, Password, Email, NumeroTelefono, Localizacion) VALUES (?, ?, ?, ?, ?)';
         } else {
-            return res.status(400).send('Invalid user type.');
+            return res.status(400).json({ success: false, message: 'Invalid user type.' });
         }
 
-        // Save the user to the database
         await db.query(query, [username, hashedPassword, email, numeroTelefono, localizacion]);
-        console.log(`${userType} registered successfully: ${username}, ${email}`);
-        res.redirect('/auth/login'); 
+        res.json({ success: true, message: 'Registration successful!' });
     } catch (err) {
         console.error('Database query error:', err);
-        res.status(500).json({ message: 'Server error.' });
+        res.status(500).json({ success: false, message: 'Server error.' });
     }
 });
 

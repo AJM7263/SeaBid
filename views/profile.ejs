@@ -111,15 +111,17 @@
       margin-bottom: 12px;
     }
 
-    .action-buttons {
+    .action-buttons,
+    .form-container {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       gap: 16px;
       margin-top: 40px;
-      flex-wrap: wrap;
     }
 
-    .action-buttons button {
+    .action-buttons button,
+    .save-button,
+    .delete-button {
       padding: 12px 24px;
       border-radius: 8px;
       border: none;
@@ -139,6 +141,7 @@
 
     .save-button {
       background-color: #6ee86e;
+      color: #fff;
     }
 
     .save-button:hover {
@@ -153,24 +156,26 @@
     .delete-button:hover {
       background-color: #e60000;
     }
-    .delete-button {
-      background-color: #ff4d4d;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+
+    .profile-section {
+      margin-top: 40px;
+      padding: 24px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .delete-button:hover {
-      background-color: #e60000;
+
+    .profile-section h2 {
+      font-size: 24px;
+      color: #233845;
+      margin-bottom: 16px;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
-    <%- include('partials/header') %>
+  <%- include('partials/header') %>
 
   <div class="profile-container">
     <div class="profile-header">
@@ -201,147 +206,96 @@
 
     <div class="history-section">
       <h3><%= userType === 'fisher' ? 'Productos Listados' : 'Historial de Compras' %></h3>
-      <% if (userType === 'fisher') { %>
-        <div class="history-section">
-          <% if (history.length > 0) { %>
-            <% history.forEach(item => { %>
-              <div class="history-item">
-                <p><strong>Producto:</strong> <%= item.TipoDePescado %></p>
-                <p><strong>Precio:</strong> $<%= parseFloat(item.Precio).toFixed(2) %></p>
-                <p><strong>Fecha:</strong> <%= new Date(item.Fecha).toLocaleDateString() %></p>
-                <form class="delete-product-form" action="/products/delete/<%= item.ProductID %>" method="POST">
-                  <button type="submit" class="delete-button">Eliminar Producto</button>
-                </form>
-              </div>
-            <% }) %>
-          <% } else { %>
-            <p>No hay productos listados.</p>
-          <% } %>
-        </div>
-      <% } else if (userType === 'restaurant') { %>
-        <% if (history.length > 0) { %>
-          <% history.forEach(item => { %>
-            <div class="history-item">
-              <p><strong>Producto:</strong> <%= item.TipoDePescado %></p>
-              <p><strong>Precio:</strong> $<%= parseFloat(item.Precio).toFixed(2) %></p>
-              <p><strong>Fecha de Compra:</strong> <%= new Date(item.PurchaseDate).toLocaleDateString() %></p>
+      <% if (history.length > 0) { %>
+        <% history.forEach(item => { %>
+          <div class="history-item">
+            <p><strong>Producto:</strong> <%= item.TipoDePescado %></p>
+            <p><strong>Precio:</strong> $<%= parseFloat(item.Precio).toFixed(2) %></p>
+            <p><strong>Fecha:</strong> <%= new Date(item.Fecha || item.PurchaseDate).toLocaleDateString() %></p>
+            <% if (userType === 'fisher') { %>
+              <form class="delete-product-form" action="/products/delete/<%= item.ProductID %>" method="POST">
+                <button type="submit" class="delete-button">Eliminar Producto</button>
+              </form>
+            <% } else { %>
               <p><strong>Order ID:</strong> <%= item.OrderID %></p>
-            </div>
-          <% }) %>
-        <% } else { %>
-          <p>No hay registros disponibles.</p>
-        <% } %>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No hay registros disponibles.</p>
       <% } %>
     </div>
-    
-  <section id="change-username">
-      <h2>Change Username</h2>
-      <form id="update-username-form">
-          <label for="username">New Username:</label>
-          <input type="text" id="username" name="username" placeholder="Enter new username" required>
-          <button type="submit">Update Username</button>
-      </form>
-  </section>
 
-  <section id="change-password">
+    <section id="change-password" class="profile-section">
       <h2>Change Password</h2>
-      <form id="update-password-form">
+      <form id="update-password-form" class="form-container">
+        <div class="info-block">
           <label for="password">New Password:</label>
           <input type="password" id="password" name="password" placeholder="Enter new password" required>
-          <button type="submit">Update Password</button>
+        </div>
+        <button type="submit" class="save-button">Update Password</button>
       </form>
-  </section>
+    </section>
 
     <div class="action-buttons">
-      <button class="save-button">Guardar cambios</button>
-    <section id="delete-account">
-        <form id="delete-account-form">
-            <button class="delete-button">Eliminar cuenta</button>
-        </form>
-    </section>
-    <section id="logout-account">
-        <form id="logout-account-form" action="/auth/logout" method="POST">
-            <button class="logout-button">Cerrar sesión</button>
-        </form>
-    </section>
+      <form id="delete-account-form">
+        <button class="delete-button">Eliminar cuenta</button>
+      </form>
+      <form id="logout-account-form" action="/auth/logout" method="POST">
+        <button class="logout-button">Cerrar sesión</button>
+      </form>
     </div>
   </div>
-<script>
 
-
-    // Show the first section by default
-    document.addEventListener('DOMContentLoaded', () => {
-        showSection('change-username');
-    });
-    // Handle Change Username Form Submission
-    document.getElementById('update-username-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-
-        const response = await fetch('/user/change-username', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username }),
-        });
-
-        if (response.ok) {
-            alert('Username updated successfully.');
-        } else {
-            alert('Failed to update username.');
-        }
-    });
-
+  <script>
     // Handle Change Password Form Submission
     document.getElementById('update-password-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const password = document.getElementById('password').value;
+      e.preventDefault();
+      const password = document.getElementById('password').value;
 
-        const response = await fetch('/user/change-password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password }),
-        });
+      const response = await fetch('/user/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
 
-        if (response.ok) {
-            alert('Password updated successfully.');
-        } else {
-            alert('Failed to update password.');
-        }
+      if (response.ok) {
+        alert('Password updated successfully.');
+      } else {
+        alert('Failed to update password.');
+      }
     });
 
     // Handle Delete Account Form Submission
     document.getElementById('delete-account-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
-        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-            const response = await fetch('/user/delete-account', {
-                method: 'POST',
-            });
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        const response = await fetch('/user/delete-account', { method: 'POST' });
 
-            if (response.ok) {
-                alert('Account deleted successfully.');
-                window.location.href = '/'; // Redirect to the homepage
-            } else {
-                alert('Failed to delete account.');
-            }
+        if (response.ok) {
+          alert('Account deleted successfully.');
+          window.location.href = '/';
+        } else {
+          alert('Failed to delete account.');
         }
+      }
     });
+
+    // Handle Logout
     document.getElementById('logout-account-form').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Prevent the default form submission
+      e.preventDefault();
 
-    const response = await fetch('/auth/logout', {
-        method: 'POST',
-    });
+      const response = await fetch('/auth/logout', { method: 'POST' });
 
-    if (response.ok) {
+      if (response.ok) {
         alert('Logged out successfully.');
-        window.location.href = '/auth/login'; // Redirect to the login page
-    } else {
+        window.location.href = '/auth/login';
+      } else {
         alert('Failed to log out.');
-    }
-});
-</script>
+      }
+    });
+  </script>
 </body>
 
 </html>
-``` 

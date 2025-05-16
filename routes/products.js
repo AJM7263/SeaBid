@@ -24,19 +24,19 @@ function isAuthenticated(req, res, next) {
 }
 
 // Fetch and display products
-router.get('/', async (req, res) => {
-    try {
-        // Fetch products from the database
-        const query = 'SELECT * FROM Product WHERE RestaurantID IS NULL';
-        const [products] = await db.query(query);
+// router.get('/', async (req, res) => {
+//     try {
+//         // Fetch products from the database
+//         const query = 'SELECT * FROM Product WHERE RestaurantID IS NULL';
+//         const [products] = await db.query(query);
 
-        // Pass the products to the EJS template
-        res.render('product', { products });
-    } catch (err) {
-        console.error('Database error:', err);
-        res.status(500).send('Failed to fetch products.');
-    }
-});
+//         // Pass the products to the EJS template
+//         res.render('product', { products });
+//     } catch (err) {
+//         console.error('Database error:', err);
+//         res.status(500).send('Failed to fetch products.');
+//     }
+// });
 
 // Fetch a specific product by ID
 router.get('/:id', async (req, res) => {
@@ -124,6 +124,33 @@ router.post('/delete/:id', async (req, res) => {
     } catch (err) {
         console.error('Error deleting product:', err);
         res.status(500).send('Failed to delete product.');
+    }
+});
+
+router.get('/', async (req, res) => {
+    const searchQuery = req.query.search || ''; // Default to an empty string if no search query is provided
+    const sort = req.query.sort || 'new'; // Default to "new" if no sort parameter is provided
+
+    let orderBy = 'Fecha DESC'; // Default sorting by newest
+    if (sort === 'price_asc') {
+        orderBy = 'Precio ASC';
+    } else if (sort === 'price_desc') {
+        orderBy = 'Precio DESC';
+    } else if (sort === 'rating') {
+        orderBy = 'Rating DESC'; // Assuming you have a "Rating" column
+    }
+
+    try {
+        const query = `
+            SELECT * FROM Product 
+            WHERE TipoDePescado LIKE ? 
+            ORDER BY ${orderBy}
+        `;
+        const [products] = await db.query(query, [`%${searchQuery}%`]); // Use a wildcard search
+        res.render('product', { products, searchQuery, sort }); // Pass searchQuery and sort to the template
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).send('Server error');
     }
 });
 

@@ -3,7 +3,7 @@ const app = express(); //initialize the app
 const path = require('path'); //Allows working with file a directory paths
 const methodOverride = require('method-override'); //Allows the use of PUT and DELETE in forms
 const session = require('express-session'); //Manager of user sessions
-const productsRoute = require('./routes/products'); //Route for products
+const productsRouter = require('./routes/products'); //Route for products
 const ordersRoute = require('./routes/orders'); //Route for orders
 const authRoute = require('./routes/auth'); //Route for authentication
 const userRoutes = require('./routes/user'); // Import user routes
@@ -26,6 +26,11 @@ app.use(session({
     cookie: { secure: false } 
 }));
 
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = !!req.session.userId; // Check if userId exists in the session
+    next();
+});
+
 app.use(methodOverride((req, res) => {
     if (req.body && req.body._method) {
         console.log(`Original method: ${req.method}, _method: ${req.body._method}`);
@@ -35,7 +40,7 @@ app.use(methodOverride((req, res) => {
 
 // Routes
 app.use('/', userRoutes); // Register user routes
-app.use('/products', productsRoute);
+app.use('/products', productsRouter);
 app.use('/orders', ordersRoute);
 app.use('/auth', authRoute);
 

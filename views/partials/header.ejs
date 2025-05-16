@@ -12,12 +12,14 @@
         <div class="navigation-pill">
             <a href="/contactus">Contact</a>
         </div>
+        <% if (!isLoggedIn) { %> 
         <div class="navigation-pill">
             <a href="/auth/login">Sign in</a>
         </div>
         <div class="navigation-pill">
             <a href="/auth/register">Register</a>
         </div>
+        <% } %> 
     </div>
     <div class="user-icon">
         <a href="/profile">
