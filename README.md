@@ -19,12 +19,11 @@ node server.js or npm start
 
 
 
-Modulos implementados 
-
-Bcrypt - Permite encriptar y comparar contraseñas de forma segura
-Ejs - Motor de plantillas para rendizar vistas HTML dinamicas desde el backend de Node.js
-express - Framework web principal para Node.js. Permite crear rutas, middleware y gestionar peticiones HTTP
-express-session - Middleware para manejar sesiones de usuario
-method - override - Permite usar metodos HTTP como PUT o DELETE
-multer - Middleware para manejar la subida de archivos
-mysql2 - Cliente para conectarse y ejecutar consultas en base de datos MySQL desde Node.js
+📦 Módulos implementados
+bcrypt: Permite encriptar y comparar contraseñas de forma segura.
+ejs: Motor de plantillas para renderizar vistas HTML dinámicas desde el backend de Node.js.
+express: Framework web principal para Node.js. Permite crear rutas, middlewares y gestionar peticiones HTTP.
+express-session: Middleware para manejar sesiones de usuario.
+method-override: Permite usar métodos HTTP como PUT o DELETE en formularios HTML.
+multer: Middleware para manejar la subida de archivos (por ejemplo, imágenes).
+mysql2: Cliente para conectarse y ejecutar consultas en bases de datos MySQL desde Node.js.
