@@ -5,6 +5,7 @@
 Clonar el repositorio
 
 git clone https://github.com/XavierJ4/SeaBid.git
+
 cd Seabid
 
 
