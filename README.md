@@ -1,6 +1,6 @@
 # SeaBid
 
-⚙️ Instalación del proyecto
+# ⚙️ Instalación del proyecto
 
 Clonar el repositorio
 
@@ -19,7 +19,7 @@ node server.js or npm start
 
 
 
-📦 Módulos implementados
+# 📦 Módulos implementados
 bcrypt: Permite encriptar y comparar contraseñas de forma segura.
 
 ejs: Motor de plantillas para renderizar vistas HTML dinámicas desde el backend de Node.js.
