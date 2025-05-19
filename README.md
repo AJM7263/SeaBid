@@ -12,4 +12,8 @@ Esto instalará automáticamente todas las dependencias listadas en package.json
 
 npm install
 
+Para correr el programa
+
+node server.js or npm start 
+
 
