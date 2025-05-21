@@ -1,3 +1,5 @@
+Cloneacion del Git de XavierJ4
+
 # SeaBid
 
 # ⚙️ Instalación del proyecto
